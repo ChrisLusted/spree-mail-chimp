@@ -35,5 +35,7 @@ class Spree::SubscriptionsController < Spree::BaseController
     respond_to do |wants|
       wants.js
     end
+    
+    redirect_to :back
   end
 end
