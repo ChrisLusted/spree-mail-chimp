@@ -26,14 +26,15 @@ class Spree::SubscriptionsController < Spree::BaseController
           self.class.benchmark "Adding mailchimp subscriber" do
             gibbon.list_subscribe(Spree::Config.get(:mailchimp_list_id), params[:email], {}, MailChimpSync::Sync::mc_subscription_opts)
           end
-        #rescue Hominid::ValidationError => e
-          #@errors << t('invalid_email_address')
-       # end
+        rescue Gibbon::ValidationError => e
+          @errors << t('invalid_email_address')
+       end
       end
     end
 
     respond_to do |wants|
       wants.js
     end
+
   end
 end
