@@ -16,7 +16,7 @@ class Spree::SubscriptionsController < Spree::BaseController
         self.class.benchmark "Checking if address exists and/or is valid" do
           @mc_member = gibbon.listMemberInfo(Spree::Config.get(:mailchimp_list_id), params[:email])
         end
-        rescue Hominid::ListError => e
+        rescue Gibbon::ListError => e
       end
 
       if @mc_member
@@ -26,9 +26,9 @@ class Spree::SubscriptionsController < Spree::BaseController
           self.class.benchmark "Adding mailchimp subscriber" do
             gibbon.list_subscribe(Spree::Config.get(:mailchimp_list_id), params[:email], {}, MailChimpSync::Sync::mc_subscription_opts)
           end
-        rescue Hominid::ValidationError => e
-          @errors << t('invalid_email_address')
-        end
+        #rescue Hominid::ValidationError => e
+          #@errors << t('invalid_email_address')
+       # end
       end
     end
 
