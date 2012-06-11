@@ -1,14 +1,15 @@
-<div id="mailchimp_subscribe_wrap">
+<div id="mailchimp_subscribe_wrap" class="clearfix">
+
   <%= form_for :user, :url => :subscriptions do |f| %>
-    <table>
-      <tr>
-        <td>
-          <%= text_field_tag :email, t('enter_your_email'), :class => 'email', :id => 'subscribe_email' %>
-        </td>
-        <td>
-          <%= submit_tag t('subscribe'), :id => 'op_subscribe' %>
-        </td>
-      </tr>
-    </table>
-  <% end -%>
+    <%= label_tag(:email, "Sign up to recieve updates and offers:") %>
+    <%= text_field_tag :email, t('enter_your_email'), :class => 'email', :id => 'subscribe_email' %>
+    <%= submit_tag("Sign up") %>  
+  <% end %>
+
+  <div class="twitter">
+    <%= link_to "https://twitter.com/#!/LighthouseLight" do %>
+      <%= image_tag("twitter.jpg", :class => "twitter_logo", :alt => "Twitter") %> 
+      <span>+ Follow us on Twitter</span>
+    <% end %>
+  </div>
 </div>
