@@ -1,7 +1,7 @@
 class Spree::SubscriptionsController < Spree::BaseController
 
-  def hominid
-    @hominid ||= Hominid::Base.new({ :api_key => Spree::Config.get(:mailchimp_api_key) })
+  def gibbon
+    @gibbon  ||= Gibbon.new(Spree::Config.get(:mailchimp_api_key))
   end
 
   def create
@@ -14,7 +14,7 @@ class Spree::SubscriptionsController < Spree::BaseController
     else
       begin
         self.class.benchmark "Checking if address exists and/or is valid" do
-          @mc_member = hominid.member_info(Spree::Config.get(:mailchimp_list_id), params[:email])
+          @mc_member = gibbon.listMemberInfo(Spree::Config.get(:mailchimp_list_id), params[:email])
         end
         rescue Hominid::ListError => e
       end
@@ -24,7 +24,7 @@ class Spree::SubscriptionsController < Spree::BaseController
       else
         begin
           self.class.benchmark "Adding mailchimp subscriber" do
-            hominid.subscribe(Spree::Config.get(:mailchimp_list_id), params[:email], {}, MailChimpSync::Sync::mc_subscription_opts)
+            gibbon.list_subscribe(Spree::Config.get(:mailchimp_list_id), params[:email], {}, MailChimpSync::Sync::mc_subscription_opts)
           end
         rescue Hominid::ValidationError => e
           @errors << t('invalid_email_address')
@@ -35,6 +35,5 @@ class Spree::SubscriptionsController < Spree::BaseController
     respond_to do |wants|
       wants.js
     end
-
   end
 end
