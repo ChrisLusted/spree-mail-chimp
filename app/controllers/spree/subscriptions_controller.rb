@@ -1,7 +1,7 @@
 class Spree::SubscriptionsController < Spree::BaseController
 
   def gibbon
-    @gibbon  ||= Gibbon.new(Spree::Config.get(:mailchimp_api_key))
+    gibbon  ||= Gibbon.new(Spree::Config.get(:mailchimp_api_key))
   end
 
   def create
@@ -13,21 +13,15 @@ class Spree::SubscriptionsController < Spree::BaseController
       @errors << t('invalid_email_address')
     else
       begin
-        self.class.benchmark "Checking if address exists and/or is valid" do
-          @mc_member = gibbon.listMemberInfo(Spree::Config.get(:mailchimp_list_id), params[:email])
-        end
-        rescue Gibbon::ListError => e
+        @mc_member = gibbon.listMemberInfo(:id => Spree::Config.get(:mailchimp_list_id), :email_address => params[:email])
       end
 
-      if @mc_member
+      if @mc_member["success"] == 1
         @errors << t('that_address_is_already_subscribed')
-      else
+
+      elsif @mc_member["errors"] == 1
         begin
-          self.class.benchmark "Adding mailchimp subscriber" do
-            gibbon.list_subscribe(Spree::Config.get(:mailchimp_list_id), params[:email], {}, MailChimpSync::Sync::mc_subscription_opts)
-          end
-        rescue Gibbon::ValidationError => e
-          @errors << t('invalid_email_address')
+          gibbon.listSubscribe({:id => Spree::Config.get(:mailchimp_list_id), :email_address => params[:email], :email_type => "html", :double_optin => Spree::Config.get(:mailchimp_double_opt_in)})
        end
       end
     end
