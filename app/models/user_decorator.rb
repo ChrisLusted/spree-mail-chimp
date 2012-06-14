@@ -65,7 +65,7 @@ Spree::User.class_eval do
       end
     # rescue Gibbon::APIError => e
     #   logger.warn "SpreeMailChimp: Failed to retrieve and store Mailchimp ID: #{e.message}"
-    # end
+    end
   end
 
   # Creates an instance of the Hominid::API
