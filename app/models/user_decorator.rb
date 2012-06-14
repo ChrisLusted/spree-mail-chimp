@@ -19,7 +19,7 @@ Spree::User.class_eval do
         assign_mailchimp_subscriber_id if self.mailchimp_subscriber_id.blank?
       # rescue Gibbon::APIError => e
       #   logger.warn "SpreeMailChimp: Failed to create contact in Mailchimp: #{e.message}"
-      # end
+      end
     end
   end
 
@@ -34,7 +34,7 @@ Spree::User.class_eval do
         logger.debug "Removing mailchimp subscriber"
       # rescue Gibbon::APIError => e
       #   logger.warn "SpreeMailChimp: Failed to remove contact from Mailchimp: #{e.message}"
-      # end
+      end
     end
   end
 
